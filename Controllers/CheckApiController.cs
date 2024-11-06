@@ -12,6 +12,11 @@ namespace ASW_Check.Controllers
     {
         private readonly CheckApiImpl _implementation;
 
+        private CheckApiController()
+        {
+            _implementation = new CheckApiImpl();
+
+        }
         public CheckApiController(CheckApiImpl implementation)
         {
             _implementation = implementation;
