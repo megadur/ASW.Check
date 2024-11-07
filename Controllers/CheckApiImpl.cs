@@ -1,4 +1,5 @@
-﻿using ASW_Check.Model;
+﻿using ARZ_Check;
+using ArzTI.Model;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -13,9 +14,9 @@ namespace ASW.Check.Controllers
         internal async Task<ICollection<Statusinfo>> PostDispensierungAsync(string value)
         {
             log.Information("PostDispensierungAsync called with value: {value}", value);
+            return ARZCheck.CheckRezept(value);
 
 
-            throw new NotImplementedException();
         }
 
         internal async Task<ICollection<ICollection<Statusinfo>>> PostDispensierungListAsync(IEnumerable<string> values)
