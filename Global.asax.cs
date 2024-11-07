@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using webapitemplate.utilities;
+using WebErrorLogging.Utilities;
 
 namespace webapitemplate
 {
@@ -21,6 +22,20 @@ namespace webapitemplate
             log.Information("log.Information");
             log.Debug("log.Debug");
             log.Verbose("log.Verbose");
+            HelperStoreSqlLog.WriteFatal(null, "WriteFatal");
+            HelperStoreSqlLog.WriteError(null, "WriteError");
+            HelperStoreSqlLog.WriteWarning(null, "WriteWarning");
+            HelperStoreSqlLog.WriteInformation(null, "WriteInformation");
+            HelperStoreSqlLog.WriteDebug(null, "WriteDebug");
+            HelperStoreSqlLog.WriteVerbose(null, "WriteVerbose");
+            Helper.WriteFatal(null, "WriteFatal");
+            Helper.WriteError(null, "WriteError");
+            Helper.WriteWarning(null, "WriteWarning");
+            Helper.WriteInformation(null, "WriteInformation");
+            Helper.WriteDebug(null, "WriteDebug");
+            Helper.WriteVerbose(null, "WriteVerbose");
+            ARZSWService.ArzSWLog.LogConfig(log);
+            ARZSWService.ArzSWLog.LogInfo("LogInfo");
         }
     }
 }

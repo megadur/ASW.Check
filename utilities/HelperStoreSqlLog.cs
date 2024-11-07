@@ -15,7 +15,8 @@ namespace WebErrorLogging.Utilities
         private static readonly ILogger Debuglog;
         private static readonly ILogger Verboselog;
         private static readonly ILogger Fatallog;
-        private static readonly string ConnectionString = ConfigurationManager.ConnectionStrings["ConnectionStringLogging"].ToString();
+        private static readonly ILogger Informationlog;
+        private static readonly string ConnectionString = ConfigurationManager.ConnectionStrings["ConnectionStringLoggingPostgres"].ToString();
         private static readonly string tableName = "logs";
 
         //Used columns (Key is a column name) 
@@ -36,7 +37,7 @@ namespace WebErrorLogging.Utilities
 
             Errorlog = new LoggerConfiguration()
                 .MinimumLevel.Error()
-                //.WriteTo.MSSqlServer(ConnectionString, "Serilogs")
+                //.WriteTo.MSSqlServer(ConnectionString, tableName)
                 .WriteTo.PostgreSQL(ConnectionString, tableName, columnWriters)
                 .CreateLogger();
 
@@ -59,7 +60,10 @@ namespace WebErrorLogging.Utilities
                 .MinimumLevel.Fatal()
                 .WriteTo.PostgreSQL(ConnectionString, tableName, columnWriters)
                 .CreateLogger();
-
+            Informationlog = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .WriteTo.PostgreSQL(ConnectionString, tableName, columnWriters)
+    .CreateLogger();
         }
 
         public static void WriteError(Exception ex, string message)
@@ -95,7 +99,7 @@ namespace WebErrorLogging.Utilities
         public static void WriteInformation(Exception ex, string message)
         {
             //Fatal - critical errors causing complete failure of the application
-            Fatallog.Write(LogEventLevel.Fatal, ex, message);
+            Informationlog.Write(LogEventLevel.Information, ex, message);
         }
     }
 }

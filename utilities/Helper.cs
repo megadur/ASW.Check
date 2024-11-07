@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Serilog;
+﻿using Serilog;
 using Serilog.Events;
+using System;
 
 namespace WebErrorLogging.Utilities
 {
@@ -14,12 +11,12 @@ namespace WebErrorLogging.Utilities
         private static readonly ILogger Debuglog;
         private static readonly ILogger Verboselog;
         private static readonly ILogger Fatallog;
+        private static readonly ILogger Infolog;
 
         static Helper()
         {
 
             // 5 MB = 5242880 bytes
-
             Errorlog = new LoggerConfiguration()
                 .MinimumLevel.Error()
                 .WriteTo.File(System.Web.Hosting.HostingEnvironment.MapPath("~/ErrorLog/Error/log.txt"),
@@ -60,6 +57,13 @@ namespace WebErrorLogging.Utilities
                     rollOnFileSizeLimit: true)
                 .CreateLogger();
 
+            Infolog = new LoggerConfiguration()
+                .MinimumLevel.Information()
+                .WriteTo.File(System.Web.Hosting.HostingEnvironment.MapPath("~/ErrorLog/Info/log.txt"),
+                rollingInterval: RollingInterval.Day,
+                fileSizeLimitBytes: 5242880,
+                rollOnFileSizeLimit: true)
+                .CreateLogger();
         }
 
         public static void WriteError(Exception ex, string message)
@@ -94,8 +98,8 @@ namespace WebErrorLogging.Utilities
 
         public static void WriteInformation(Exception ex, string message)
         {
-            //Fatal - critical errors causing complete failure of the application
-            Fatallog.Write(LogEventLevel.Fatal, ex, message);
+            //Information - 
+            Infolog.Write(LogEventLevel.Information, ex, message);
         }
 
     }

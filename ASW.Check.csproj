@@ -46,6 +46,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ArzSW_Service, Version=0.1.2.1, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>libs\V0.1.2.1 - 240724\ArzSW_Service.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Bcl.AsyncInterfaces.8.0.0\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
@@ -269,6 +273,66 @@
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="libs\V0.1.2.1 - 240724\ArzSW_Service.dll" />
+    <Content Include="libs\V0.1.2.1 - 240724\ArzSW_Service.xml" />
+    <Content Include="libs\V0.1.2.1 - 240724\BCrypt.Net-Next.dll" />
+    <Content Include="libs\V0.1.2.1 - 240724\BCrypt.Net-Next.xml" />
+    <Content Include="libs\V0.1.2.1 - 240724\BouncyCastle.Cryptography.dll" />
+    <Content Include="libs\V0.1.2.1 - 240724\BouncyCastle.Cryptography.xml" />
+    <Content Include="libs\V0.1.2.1 - 240724\Fhir.Metrics.dll" />
+    <Content Include="libs\V0.1.2.1 - 240724\Firely.Fhir.Packages.dll" />
+    <Content Include="libs\V0.1.2.1 - 240724\Hl7.Fhir.Base.dll" />
+    <Content Include="libs\V0.1.2.1 - 240724\Hl7.Fhir.Base.xml" />
+    <Content Include="libs\V0.1.2.1 - 240724\Hl7.Fhir.Conformance.dll" />
+    <Content Include="libs\V0.1.2.1 - 240724\Hl7.Fhir.Conformance.xml" />
+    <Content Include="libs\V0.1.2.1 - 240724\Hl7.Fhir.R4.dll" />
+    <Content Include="libs\V0.1.2.1 - 240724\Hl7.Fhir.R4.xml" />
+    <Content Include="libs\V0.1.2.1 - 240724\ICSharpCode.SharpZipLib.dll" />
+    <Content Include="libs\V0.1.2.1 - 240724\ICSharpCode.SharpZipLib.xml" />
+    <Content Include="libs\V0.1.2.1 - 240724\Microsoft.Bcl.AsyncInterfaces.dll" />
+    <Content Include="libs\V0.1.2.1 - 240724\Microsoft.Bcl.AsyncInterfaces.xml" />
+    <Content Include="libs\V0.1.2.1 - 240724\Microsoft.Bcl.HashCode.dll" />
+    <Content Include="libs\V0.1.2.1 - 240724\Microsoft.Bcl.HashCode.xml" />
+    <Content Include="libs\V0.1.2.1 - 240724\Microsoft.Extensions.DependencyInjection.Abstractions.dll" />
+    <Content Include="libs\V0.1.2.1 - 240724\Microsoft.Extensions.DependencyInjection.Abstractions.xml" />
+    <Content Include="libs\V0.1.2.1 - 240724\Microsoft.Extensions.Logging.Abstractions.dll" />
+    <Content Include="libs\V0.1.2.1 - 240724\Microsoft.Extensions.Logging.Abstractions.xml" />
+    <Content Include="libs\V0.1.2.1 - 240724\Newtonsoft.Json.dll" />
+    <Content Include="libs\V0.1.2.1 - 240724\Newtonsoft.Json.xml" />
+    <Content Include="libs\V0.1.2.1 - 240724\Npgsql.dll" />
+    <Content Include="libs\V0.1.2.1 - 240724\Npgsql.xml" />
+    <Content Include="libs\V0.1.2.1 - 240724\SemanticVersioning.dll" />
+    <Content Include="libs\V0.1.2.1 - 240724\Serilog.dll" />
+    <Content Include="libs\V0.1.2.1 - 240724\Serilog.Sinks.Console.dll" />
+    <Content Include="libs\V0.1.2.1 - 240724\Serilog.Sinks.Console.xml" />
+    <Content Include="libs\V0.1.2.1 - 240724\Serilog.Sinks.File.dll" />
+    <Content Include="libs\V0.1.2.1 - 240724\Serilog.Sinks.File.xml" />
+    <Content Include="libs\V0.1.2.1 - 240724\Serilog.xml" />
+    <Content Include="libs\V0.1.2.1 - 240724\System.Buffers.dll" />
+    <Content Include="libs\V0.1.2.1 - 240724\System.Buffers.xml" />
+    <Content Include="libs\V0.1.2.1 - 240724\System.Collections.Immutable.dll" />
+    <Content Include="libs\V0.1.2.1 - 240724\System.Collections.Immutable.xml" />
+    <Content Include="libs\V0.1.2.1 - 240724\System.ComponentModel.Annotations.dll" />
+    <Content Include="libs\V0.1.2.1 - 240724\System.Diagnostics.DiagnosticSource.dll" />
+    <Content Include="libs\V0.1.2.1 - 240724\System.Diagnostics.DiagnosticSource.xml" />
+    <Content Include="libs\V0.1.2.1 - 240724\System.Memory.dll" />
+    <Content Include="libs\V0.1.2.1 - 240724\System.Memory.xml" />
+    <Content Include="libs\V0.1.2.1 - 240724\System.Numerics.Vectors.dll" />
+    <Content Include="libs\V0.1.2.1 - 240724\System.Numerics.Vectors.xml" />
+    <Content Include="libs\V0.1.2.1 - 240724\System.Runtime.CompilerServices.Unsafe.dll" />
+    <Content Include="libs\V0.1.2.1 - 240724\System.Runtime.CompilerServices.Unsafe.xml" />
+    <Content Include="libs\V0.1.2.1 - 240724\System.Security.Cryptography.Pkcs.dll" />
+    <Content Include="libs\V0.1.2.1 - 240724\System.Security.Cryptography.Pkcs.xml" />
+    <Content Include="libs\V0.1.2.1 - 240724\System.Text.Encodings.Web.dll" />
+    <Content Include="libs\V0.1.2.1 - 240724\System.Text.Encodings.Web.xml" />
+    <Content Include="libs\V0.1.2.1 - 240724\System.Text.Json.dll" />
+    <Content Include="libs\V0.1.2.1 - 240724\System.Text.Json.xml" />
+    <Content Include="libs\V0.1.2.1 - 240724\System.Threading.Channels.dll" />
+    <Content Include="libs\V0.1.2.1 - 240724\System.Threading.Channels.xml" />
+    <Content Include="libs\V0.1.2.1 - 240724\System.Threading.Tasks.Extensions.dll" />
+    <Content Include="libs\V0.1.2.1 - 240724\System.Threading.Tasks.Extensions.xml" />
+    <Content Include="libs\V0.1.2.1 - 240724\System.ValueTuple.dll" />
+    <Content Include="libs\V0.1.2.1 - 240724\System.ValueTuple.xml" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />
@@ -304,6 +368,8 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
+    <Content Include="libs\V0.1.2.1 - 240724\ArzSW_Service.dll.config" />
+    <Content Include="libs\V0.1.2.1 - 240724\Versionen.md" />
     <None Include="Scripts\jquery-3.6.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.6.1.js" />
     <Content Include="Scripts\jquery-3.6.1.min.js" />
