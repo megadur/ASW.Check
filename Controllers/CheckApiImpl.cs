@@ -13,8 +13,6 @@ namespace ASW.Check.Controllers
         internal async Task<ICollection<Statusinfo>> PostDispensierungAsync(string value)
         {
             log.Information("PostDispensierungAsync called with value: {value}", value);
-
-
             throw new NotImplementedException();
         }
 
