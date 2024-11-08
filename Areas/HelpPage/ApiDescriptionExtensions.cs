@@ -1,9 +1,8 @@
-using System;
 using System.Text;
 using System.Web;
 using System.Web.Http.Description;
 
-namespace webapitemplate.Areas.HelpPage
+namespace WebApiFramework.Areas.HelpPage
 {
     public static class ApiDescriptionExtensions
     {
@@ -22,16 +21,16 @@ namespace webapitemplate.Areas.HelpPage
             {
                 string query = urlParts[1];
                 string[] queryKeys = HttpUtility.ParseQueryString(query).AllKeys;
-                queryKeyString = String.Join("_", queryKeys);
+                queryKeyString = string.Join("_", queryKeys);
             }
 
             StringBuilder friendlyPath = new StringBuilder();
-            friendlyPath.AppendFormat("{0}-{1}",
+            _ = friendlyPath.AppendFormat("{0}-{1}",
                 description.HttpMethod.Method,
-                localPath.Replace("/", "-").Replace("{", String.Empty).Replace("}", String.Empty));
+                localPath.Replace("/", "-").Replace("{", string.Empty).Replace("}", string.Empty));
             if (queryKeyString != null)
             {
-                friendlyPath.AppendFormat("_{0}", queryKeyString.Replace('.', '-'));
+                _ = friendlyPath.AppendFormat("_{0}", queryKeyString.Replace('.', '-'));
             }
             return friendlyPath.ToString();
         }

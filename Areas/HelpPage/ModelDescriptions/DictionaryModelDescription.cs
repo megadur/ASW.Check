@@ -1,4 +1,4 @@
-namespace webapitemplate.Areas.HelpPage.ModelDescriptions
+namespace WebApiFramework.Areas.HelpPage.ModelDescriptions
 {
     public class DictionaryModelDescription : KeyValuePairModelDescription
     {

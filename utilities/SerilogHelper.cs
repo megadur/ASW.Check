@@ -1,6 +1,6 @@
 ﻿using Serilog;
 
-namespace webapitemplate.utilities
+namespace WebApiFramework.utilities
 {
     public static class SerilogHelper
     {

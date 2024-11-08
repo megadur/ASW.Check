@@ -1,0 +1,704 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ARZCheck</name>
+    </assembly>
+    <members>
+        <member name="T:ARZ_Check.ARZCheck">
+            <summary>
+            Klasse mit Algorithmen zur Rezeptprüfung
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheck.PZNsUngueltig">
+            <summary>
+            PZNs die nicht verarbeitet werden können
+            <para>Format &lt;PZN, PZN-Kenner&gt;</para>
+            <para>- 0 - PZN ist NICHT vorhanden</para>
+            <para>- 1 - PZN hat ungültige Prüfziffer</para>
+            <para>- 2 - SKZ wurde als PZN eingetragen</para>
+            <para>-...</para>
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheck.SKZsUngueltig">
+            <summary>
+            SKZs die nicht verarbeitet werden können
+            <para>Format &lt;SKZ, SKZ-Kenner&gt;</para>
+            <para>- 0 - SKZ ist NICHT vorhanden</para>
+            <para>- 1 - SKZ hat ungültige Prüfziffer</para>
+            <para>-...</para>
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheck.AppOpt">
+            <summary>
+            App-Optionen
+            <para>- z.B. Prüfungen und deren Einstelleungen</para>
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheck.AppOptPfad">
+            <summary>
+            Pfad zur Optionen Datei der Anwendung
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheck.SKZTA1Anh1Pfad">
+            <summary>
+            Pfad zu Sonderkennzeichen aus TA1 Anhang 1
+            </summary>
+        </member>
+        <member name="M:ARZ_Check.ARZCheck.CheckRezept(System.String)">
+            <summary>
+            Rezept prüfen
+            </summary>
+            <param name="EDispensierungBase64">eDispensierung unverschlüsselt im Base64 Format</param>
+        </member>
+        <member name="M:ARZ_Check.ARZCheck.CheckRezept(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Rezept prüfen
+            </summary>
+            <param name="EDispensierungBase64">eDispensierung unverschlüsselt im Base64 Format</param>
+            <param name="DebugInfo">T - Liste der StatusInfos enthält auch DEBUG Meldungen | F - Es werden nur Rezept relevante StatusInfos zurückgegeben</param>
+            <param name="LoggingToFile">Loggin in Datei - DEFAULT = false</param>
+            <returns></returns>
+        </member>
+        <member name="M:ARZ_Check.ARZCheck.CheckRezept(ARZSWService.ArzSWServiceModelle.ModellEDispensierung,eVerordnungBundle.EVerordnungModelle.ModellEVerordnungBundle,eAbgabedatenBundle.EAbgabedatenModelle.ModellEAbgabedatenBundle,System.Boolean)">
+            <summary>
+            Rezept prüfen
+            </summary>
+            <param name="eDispensierung"></param>
+            <param name="eVerordnungdaten"></param>
+            <param name="eAbgabedaten"></param>
+            <param name="DebugInfo">T - Liste der StatusInfos enthält auch DEBUG Meldungen | F - Es werden nur Rezept relevante StatusInfos zurückgegeben</param>
+        </member>
+        <member name="T:ARZ_Check.ARZCheckHelper">
+            <summary>
+            RZCheck Hilfsmathoden
+            </summary>
+        </member>
+        <member name="M:ARZ_Check.ARZCheckHelper.GetAppOptionen``1(System.String)">
+            <summary>
+            Lesen eines beliebigen Objekts als Optionen
+            </summary>
+            <typeparam name="T">Datentyp der Optionen</typeparam>
+            <param name="appOptionenDateiName">Dateiname der XML-Optionen</param>
+            <returns>Optionen im übergebenen Datentyp</returns>
+        </member>
+        <member name="M:ARZ_Check.ARZCheckHelper.SetAppOptionen(System.Object,System.String)">
+            <summary>
+            Speichern eines beliebigen Objekts als Optionen
+            </summary>
+            <param name="appOptionen">Objekt das als Optionen gespeichert werden soll</param>
+            <param name="appOptionenDateiName">Dateiname der XML-Optionen</param>
+            <returns>T|F - Speichern der Optionen erfolgreich</returns>
+        </member>
+        <member name="T:ARZ_Check.ARZCheckModelle">
+            <summary>
+            Modelle für ARZ-Check
+            </summary>
+        </member>
+        <member name="T:ARZ_Check.ARZCheckModelle.FStatus">
+            <summary>
+            Typ zu Fehler-Meldungen
+            <para> - Definiert den Typ von Fehler-Medungen - VOR_PRUEFUNG | HINWEIS | VERBESSERBAR | FEHLER | ABRECHENBAR | ...</para>
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckModelle.FStatus.INIT">
+            <summary>VOR_PRUEFUNG
+            <para> - Das Rezept liegt im Rechenzentrum zur Abrechnung vor, ist jedoch noch nicht geprüft worden.</para>
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckModelle.FStatus.VOR_PRUEFUNG">
+            <summary>VOR_PRUEFUNG
+            <para> - Das Rezept liegt im Rechenzentrum zur Abrechnung vor, ist jedoch noch nicht geprüft worden.</para>
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckModelle.FStatus.HINWEIS">
+            <summary>HINWEIS
+            <para> - Das Rezept ist geprüft und abrechenbar. Es gibt mindestens einen Hinweis zu diesem eRezept der ggf. zu beachten ist.</para>
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckModelle.FStatus.VERBESSERBAR">
+            <summary>VERBESSERBAR
+            <para> - Das Rezept ist geprüft und prinzipiell abrechenbar. Es kann jedoch ein besseres Ergebnis erreicht werden.</para>
+            <para> - Es besteht Retax-Gefahr.</para>
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckModelle.FStatus.VERBESSERBARPLUS">
+            <summary>VERBESSERBAR +
+            <para> - Das Rezept ist geprüft und prinzipiell abrechenbar. Es kann jedoch ein besseres Ergebnis erreicht werden.</para>
+            <para> - Es besteht erhöhte Retax-Gefahr.</para>
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckModelle.FStatus.FEHLER">
+            <summary>FEHLER
+            <para> - Das Rezept ist geprüft und hat einen Fehler, welche die Abrechnung erfolglos machen kann.</para>
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckModelle.FStatus.ABRECHENBAR">
+            <summary>ABRECHENBAR
+            <para> - Das Rezept ist geprüft, es konnte kein Fehler und keine Möglichkeit der Verbesserung festgestellt werden.</para>
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckModelle.FStatus.VOR_ABRECHNUNG">
+            <summary>VOR_ABRECHNUNG
+            <para> - Das Rezept ist geprüft und in Ordnung. Es befindet sich schon im Abrechungsprozess.</para>
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckModelle.FStatus.ABGERECHNET">
+            <summary>ABGERECHNET
+            <para> - Das Rezept wurde an die Krankenkasse übermittelt.</para>
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckModelle.FStatus.STORNIERT">
+            <summary>STORNIERT
+            <para> - Das eRezept ist storniert worden.</para>
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckModelle.FStatus.RUECKWEISUNG">
+            <summary>RUECKWEISUNG
+            <para> -  Das eRezept wurde von der KK zurückgewiesen.</para>
+            <para> DIESER FEHLER-TYP IST NICHT MEHR IN VERWENDUNG!</para>
+            </summary>
+        </member>
+        <member name="T:ARZ_Check.ARZCheckModelle.CheckCodeKenner">
+            <summary>
+            CodeKenner für Prüfungen
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckModelle.CheckCodeKenner.UNBEKANNT">
+            <summary>
+            Unbekannt - Init
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckModelle.CheckCodeKenner.DIS_VERSION">
+            <summary>
+            Prüfung - Version der eDispensierung
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckModelle.CheckCodeKenner.DIS_ER_ID">
+            <summary>
+            Prüfung - In allen FHIR Bundles muss die identische ER-ID stehen
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckModelle.CheckCodeKenner.DIS_WORKFLOW_TYP">
+            <summary>
+            Prüfung - Es sind nur bestimmte Workflowtypen erlaubt
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckModelle.CheckCodeKenner.EVER_ARZT_SIGNATUR">
+            <summary>
+            Prüfung - Signatur in der eVerordnung mit den FHIR Daten prüfen
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckModelle.CheckCodeKenner.EVER_ARZT_TYP">
+            <summary>
+            Prüfung - Arzt-Typ des ausstellenden Arztes ermitteln
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckModelle.CheckCodeKenner.EVER_ARZT_REFERENZ">
+            <summary>
+            Prüfung - Arzt-Referenz des Verantwortlichen Arztes
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckModelle.CheckCodeKenner.EVER_ARZT_BEZEICHNUNG">
+            <summary>
+            Prüfung - Korrekte Berufsbezeichnung des (Zahn)Arzt
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckModelle.CheckCodeKenner.EVER_ARZT_LANR">
+            <summary>
+            Prüfung - Lebenslange (Zahn)Arzt nummer muss eine korrekte Prüfziffer haben
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckModelle.CheckCodeKenner.EVER_ARZT_VERSICHERUNG_ART">
+            <summary>
+            Prüfung - Nur bestimmte Versicherungsarten erlaubt
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckModelle.CheckCodeKenner.EVER_MEDIZINPRODUKT">
+            <summary>
+            Prüfung - Medizinprodukte sind (noch) nicht erlaubt
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckModelle.CheckCodeKenner.EVER_TK_VERSICHERTER">
+            <summary>
+            Prüfung - Test-Versicherter der Techniker Krankenkasse herausfiltern
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckModelle.CheckCodeKenner.QUIT_">
+            <summary>
+            Prüfung - ...
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckModelle.CheckCodeKenner.EABG_SEQUENZ">
+            <summary>
+            Prüfung - Mehr als eine Sequenz enthalten
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckModelle.CheckCodeKenner.EABG_ABRECHNUNGSZEILE_QES">
+            <summary>
+            Prüfung - Abrechnungszeilen - Kombinationen der Zusatzattribute erfordern QES
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckModelle.CheckCodeKenner.EABG_APOTHEKER_QES">
+            <summary>
+            Prüfung - Rezeptänderung - QES des Apotheker erforderlich
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckModelle.CheckCodeKenner.EABG_ABGABEZEITRAUM">
+            <summary>
+            Prüfung - Abgabezeitraum überschritten
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckModelle.CheckCodeKenner.EABG_CHARGE">
+            <summary>
+            Prüfung - Charge-Nr. muss vorhanden sein
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckModelle.CheckCodeKenner.EABG_VERTRIEBSSTATUS">
+            <summary>
+            Prüfung - Ist die PZN noch in Vertrieb
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckModelle.CheckCodeKenner.EABG_VERKEHRSSTATUS">
+            <summary>
+            Prüfung - Ist die PZN noch in Verkehr
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckModelle.CheckCodeKenner.EABG_REZEPTAENDERUNG">
+            <summary>
+            Prüfung - Bei bestimmten Rezeptänderungen muss eine Dokumentation vorhanden sein
+            </summary>
+        </member>
+        <member name="T:ARZ_Check.ARZCheckModelle.CheckRegelCode">
+            <summary>
+            Regel-Codes die in Prüfungen verwendet werden
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckModelle.CheckRegelCode.CHK_XML_001">
+            <summary>
+            CHK-XML-001 - FEHLER beim Deserialisieren eines E-Rezepts
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckModelle.CheckRegelCode.CHK_FHIR_101">
+            <summary>
+            CHK-FHIR-101 - eVerordnung fehlerhaft
+            <para>- Die eVerordnung ist nicht vorhanden.</para>
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckModelle.CheckRegelCode.CHK_FHIR_102">
+            <summary>
+            CHK-FHIR-102 - Decodierung eVerordnung fehlerhaft
+            <para>- Die eVerordnung konnte nicht decodiert werden.</para>
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckModelle.CheckRegelCode.CHK_FHIR_201">
+            <summary>
+            CHK-FHIR-201 - Quittung fehlerhaft
+            <para>- Die Quittung ist nicht vorhanden.</para>
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckModelle.CheckRegelCode.CHK_FHIR_202">
+            <summary>
+            CHK-FHIR-302 - Decodierung Quittung fehlerhaft
+            <para>- Die Quittung konnte nicht decodiert werden.</para>
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckModelle.CheckRegelCode.CHK_FHIR_301">
+            <summary>
+            CHK-FHIR-301 - eAbgabedaten fehlerhaft
+            <para>- Die eAbgabedaten ist nicht vorhanden.</para>
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckModelle.CheckRegelCode.CHK_FHIR_302">
+            <summary>
+            CHK-FHIR-302 - Decodierung eAbgabedaten fehlerhaft
+            <para>- Die eAbgabedaten konnte nicht decodiert werden.</para>
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckModelle.CheckRegelCode.CHK_SIG_001">
+            <summary>
+            CHK-SIG-001 - Arzt-Signatur konnte nicht geprüft werden
+            <para>- Es wurde kein (Zahn)Arzt mit der notwendigen Qualifikation gefunden um die Arzt-Signatur zu prüfen.</para>
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckModelle.CheckRegelCode.CHK_SIG_012">
+            <summary>
+            CHK-SIG-012 - Nachname der Arzt-Signatur fehlerhaft - CHK-SIG-012
+            <para>- Sehr wahrscheinliche Retax zum E-Rezept. Der Nachname der Arzt-Signatur im Zertifikat und im FHIR Profil muss exakt übereinstimmen.</para>
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckModelle.CheckRegelCode.CHK_SIG_011">
+            <summary>
+            CHK-SIG-011 - Arzt-Signatur konnte nicht geprüft werden
+            <para>- Wahrscheinliche Retax zum E-Rezept. Der Nachname der Arzt-Signatur im Zertifikat und im FHIR Profil muss exakt übereinstimmen.</para>
+            </summary>
+        </member>
+        <member name="T:ARZ_Check.ARZCheckModelle.ModellSKZTA1Anhang1">
+            <summary>
+            Sonderkennzeichen aus der TA1 - Anhang 1 mit Attributen
+            </summary>
+        </member>
+        <member name="P:ARZ_Check.ARZCheckModelle.ModellSKZTA1Anhang1.SKZTA1Anhang1">
+            <summary>
+            Sonderkennzeichen aus der TA1 - Anlage 1
+            </summary>
+        </member>
+        <member name="M:ARZ_Check.ARZCheckModelle.ModellSKZTA1Anhang1.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="T:ARZ_Check.ARZCheckModelle.ModellSKZTA1">
+            <summary>
+            Ein Sonderkennzeichen aus der TA1 - Anhang 1 mit Attributen
+            </summary>
+        </member>
+        <member name="P:ARZ_Check.ARZCheckModelle.ModellSKZTA1.SKZ">
+            <summary>Sonderkennzeichen - SKZ
+            </summary>  
+        </member>
+        <member name="P:ARZ_Check.ARZCheckModelle.ModellSKZTA1.Beschreibung">
+            <summary>
+            Beschreibung zum SKZ
+            </summary>
+        </member>
+        <member name="P:ARZ_Check.ARZCheckModelle.ModellSKZTA1.UStKenner">
+            <summary>
+            Umsatzsteuer-Kenner
+            <para>0 = steuerfrei</para>
+            <para>1 = ermäßigter Steuersatz</para>
+            <para>2 = voller Steuersatz/Regelsteuersatz </para>
+            <para>- = nicht besetzt = 0</para>
+            </summary>
+        </member>
+        <member name="P:ARZ_Check.ARZCheckModelle.ModellSKZTA1.InRezeptKenner">
+            <summary>
+            Wo darf das SKZ verwendet werden
+            <para>0 = nur Papierrezept</para>
+            <para>1 = Papier- und E-Rezept</para>
+            <para>2 = nur E-Rezept</para>
+            </summary>
+        </member>
+        <member name="P:ARZ_Check.ARZCheckModelle.ModellSKZTA1.ZuzatzdatenKenner">
+            <summary>
+            Zusatzdaten zum SKZ
+            <para>-> Die Kenner 1 und 3 erfordern auch die Angabe von Zusatzdaten</para>
+            <para>0 = nur reine Rezeptposition, verursacht keine ZD und ist nicht in ZD enthalten</para>
+            <para>1 = Rezeptposition verursacht nur ZD, ist in ZD nicht enthalten</para>
+            <para>2 = nur in Zusatzdaten vorhanden</para>
+            <para>3 = Rezeptposition verursacht ZD und kann in ZD vorhanden sein</para>
+            <para>4 = nur reine Rezeptposition, verursacht keine ZD, kann aber in ZD enthalten sein</para>
+            </summary>
+        </member>
+        <member name="P:ARZ_Check.ARZCheckModelle.ModellSKZTA1.ApoRabattKenner">
+            <summary>
+            Apotheken-Rabatt-Kenner
+            <para>0 = kein Apotheken-Rabatt</para>
+            <para>1 = Apotheken-Rabatt</para>
+            </summary>
+        </member>
+        <member name="P:ARZ_Check.ARZCheckModelle.ModellSKZTA1.GueltigAbAbgabedatum">
+            <summary>Gueltig ab dem Abgabedatum
+            </summary>  
+        </member>
+        <member name="P:ARZ_Check.ARZCheckModelle.ModellSKZTA1.GueltigBisAbgabedatum">
+            <summary>Gueltig bis zum Abgabedatum
+            </summary>  
+        </member>
+        <member name="M:ARZ_Check.ARZCheckModelle.ModellSKZTA1.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="T:ARZ_Check.ARZCheckOptionen">
+            <summary>
+            ARZ-Check Optionen
+            </summary>
+        </member>
+        <member name="P:ARZ_Check.ARZCheckOptionen.OptionenGelesen">
+            <summary>
+            Optionen konnten gelesen werden
+            </summary>
+        </member>
+        <member name="P:ARZ_Check.ARZCheckOptionen.AppInfo">
+            <summary>
+            Daten zur Anwendung
+            </summary>
+        </member>
+        <member name="P:ARZ_Check.ARZCheckOptionen.Checks">
+            <summary>
+            Prüfungen für Rezepte
+            </summary>
+        </member>
+        <member name="P:ARZ_Check.ARZCheckOptionen.Datenbanken">
+            <summary>
+            DB-Verbindungen
+            <para> - evtl. mit verschlüsseltem Passwort</para>
+            </summary>
+        </member>
+        <member name="M:ARZ_Check.ARZCheckOptionen.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="T:ARZ_Check.ARZCheckOptionen.App">
+            <summary>
+            Angaben zur Anwendung
+            </summary>
+        </member>
+        <member name="P:ARZ_Check.ARZCheckOptionen.App.AppName">
+            <summary>
+            Name der Anwendung
+            </summary>
+        </member>
+        <member name="P:ARZ_Check.ARZCheckOptionen.App.AppCopyRight">
+            <summary>
+            Copyright der Anwendung
+            </summary>
+        </member>
+        <member name="P:ARZ_Check.ARZCheckOptionen.App.AppVersion">
+            <summary>
+            Version der Anwendung
+            </summary>
+        </member>
+        <member name="P:ARZ_Check.ARZCheckOptionen.App.AppXmlVersion">
+            <summary>
+            Version der XML Daten (Optionen)
+            </summary>
+        </member>
+        <member name="M:ARZ_Check.ARZCheckOptionen.App.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="T:ARZ_Check.ARZCheckOptionen.Check">
+            <summary>
+            Prüfung für Rezepte 
+            </summary>
+        </member>
+        <member name="P:ARZ_Check.ARZCheckOptionen.Check.Scope">
+            <summary>
+            Scope (Bereich) für den eine Prüfung durchgeführt wird
+            </summary>
+        </member>
+        <member name="P:ARZ_Check.ARZCheckOptionen.Check.CodeKenner">
+            <summary>
+            Code Kenner der Prüfung
+            </summary>
+        </member>
+        <member name="P:ARZ_Check.ARZCheckOptionen.Check.Bezeichnung">
+            <summary>
+            Bezeichnung der Prüfung
+            </summary>
+        </member>
+        <member name="P:ARZ_Check.ARZCheckOptionen.Check.Beschreibung">
+            <summary>
+            Beschreibung zur Prüfung
+            <para>- ggf. auch mit Quellenangaben</para>
+            </summary>
+        </member>
+        <member name="P:ARZ_Check.ARZCheckOptionen.Check.CheckStatuses">
+            <summary>
+            Check-Status für ein oder mehrere Rückmeldungen
+            </summary>
+        </member>
+        <member name="P:ARZ_Check.ARZCheckOptionen.Check.CodeImplementiert">
+            <summary>
+            Prüfung ist im Code implementiert
+            </summary>
+        </member>
+        <member name="P:ARZ_Check.ARZCheckOptionen.Check.Aktiv">
+            <summary>
+            Prüfung ist aktiv
+            </summary>
+        </member>
+        <member name="P:ARZ_Check.ARZCheckOptionen.Check.Gesperrt">
+            <summary>
+            Prüfung ist gesperrt - auch wenn diese als aktiv gekennzeichnet ist
+            </summary>
+        </member>
+        <member name="P:ARZ_Check.ARZCheckOptionen.Check.GueltigVon">
+            <summary>
+            Prüfung ist gültig ab dem Datum
+            </summary>
+        </member>
+        <member name="P:ARZ_Check.ARZCheckOptionen.Check.GueltigBis">
+            <summary>
+            Prüfung ist gültig bis zu dem Datum
+            </summary>
+        </member>
+        <member name="M:ARZ_Check.ARZCheckOptionen.Check.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="T:ARZ_Check.ARZCheckOptionen.CheckStatus">
+            <summary>
+            Status für eine Prüfung 
+            </summary>
+        </member>
+        <member name="P:ARZ_Check.ARZCheckOptionen.CheckStatus.StatusKenner">
+            <summary>
+            Code Kenner der Prüfung
+            </summary>
+        </member>
+        <member name="P:ARZ_Check.ARZCheckOptionen.CheckStatus.Status">
+            <summary>
+            Prüfung ist im Code implementiert
+            </summary>
+        </member>
+        <member name="P:ARZ_Check.ARZCheckOptionen.CheckStatus.Beschreibung">
+            <summary>
+            Beschreibung zur Prüfung
+            <para>- ggf. auch mit Quellenangaben</para>
+            </summary>
+        </member>
+        <member name="M:ARZ_Check.ARZCheckOptionen.CheckStatus.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="T:ARZ_Check.ARZCheckOptionen.Datenbank">
+            <summary>
+            Datenbank-Optionen
+            <para> - Beschreibt alle Einstellmöglichkkeiten zu einer Datenbank-Verbindung</para>
+            </summary>
+        </member>
+        <member name="P:ARZ_Check.ARZCheckOptionen.Datenbank.DBTyp">
+            <summary>
+            Datenbank-Typ
+            <para> - z.B. MSSQL (Microsoft SQL-Server), PGSQL (PostgreSQL)</para>
+            </summary>
+        </member>
+        <member name="P:ARZ_Check.ARZCheckOptionen.Datenbank.ConId">
+            <summary>
+            Connection-ID die diese Datenbankverbindung benennt
+            </summary>
+        </member>
+        <member name="P:ARZ_Check.ARZCheckOptionen.Datenbank.BereichId">
+            <summary>
+            Bereich zu der diese Datenbank gehört
+            <para> - z.B. SYSTEM, ABDAARTIKEL, ABDAARTIKELPLUSV, ABDADATENBANK, ...</para>
+            </summary>
+        </member>
+        <member name="P:ARZ_Check.ARZCheckOptionen.Datenbank.Bezeichnung">
+            <summary>
+            Nähere Bezeichnung der Datenbank
+            </summary>
+        </member>
+        <member name="P:ARZ_Check.ARZCheckOptionen.Datenbank.DatenTyp">
+            <summary>
+            Typ-Beschreibung der enthaltenen Daten
+            <para> - SYSTEM -> REKASSYSTEM, ABDAARTIKEL, ...</para>
+            <para> - REKASDATEN -> APO, SLE, ...</para>
+            <para> - BILLIDATEN -> APO, SLE, ...</para>
+            </summary>
+        </member>
+        <member name="P:ARZ_Check.ARZCheckOptionen.Datenbank.Server">
+            <summary>
+            Datenbank-Server
+            </summary>
+        </member>
+        <member name="P:ARZ_Check.ARZCheckOptionen.Datenbank.Port">
+            <summary>
+            Datenbank-Server - Port
+            </summary>
+        </member>
+        <member name="P:ARZ_Check.ARZCheckOptionen.Datenbank.DatenbankName">
+            <summary>
+            Name der Datenbank
+            </summary>
+        </member>
+        <member name="P:ARZ_Check.ARZCheckOptionen.Datenbank.User">
+            <summary>
+            Datenbank-Benutzer für den Zugriff
+            </summary>
+        </member>
+        <member name="P:ARZ_Check.ARZCheckOptionen.Datenbank.Password">
+            <summary>
+            Passwort zum Datenbnk-Benutzer
+            <para> - Das Passwort kann verschlüssel angegeben werden</para>
+            </summary>
+        </member>
+        <member name="P:ARZ_Check.ARZCheckOptionen.Datenbank.PasswordCrypt">
+            <summary>
+            Passwort ist verschlüsselt T|F - F = DEFAULT
+            </summary>
+        </member>
+        <member name="M:ARZ_Check.ARZCheckOptionen.Datenbank.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="T:ARZ_Check.ARZCheckOptionen.DatenbaktTyp">
+            <summary>
+            Datenbank-Typ
+            <para> - MSSQL - Microsoft SQL-Server</para>
+            <para> - PGSQL - PostgreSQL</para>
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckOptionen.DatenbaktTyp.MSSQL">
+            <summary>
+            MSSQL Datembank
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckOptionen.DatenbaktTyp.PGSQL">
+            <summary>
+            PostgreSQL Datenbank
+            <para>ACHTUNG! WIRD AKTUELL NICHT UNTERSTÜTZT!</para>
+            </summary>
+        </member>
+        <member name="T:ARZ_Check.ARZCheckOptionen.CheckScope">
+            <summary>
+            Bereich für den eine Prüfung durchgeführt wird
+            <para> - EDIS - eDispensierung oder FHIR-Bundle übergreifend</para>
+            <para> - EVER - eVerordnung</para>
+            <para> - QUIT - Quittung</para>
+            <para> - EABG - eAbgabedaten</para>
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckOptionen.CheckScope.UNKN">
+            <summary>
+            Unbekannt - Init
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckOptionen.CheckScope.EDIS">
+            <summary>
+            eDispensierung oder FHIR-Bundle übergreifend
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckOptionen.CheckScope.EVER">
+            <summary>
+            eVerordnung
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckOptionen.CheckScope.QUIT">
+            <summary>
+            Quittung
+            </summary>
+        </member>
+        <member name="F:ARZ_Check.ARZCheckOptionen.CheckScope.EABG">
+            <summary>
+            eAbgabedaten
+            </summary>
+        </member>
+        <member name="T:ExceptionHelpers">
+            <summary>
+            Erweiterung zur Exception-Klasse
+            </summary>
+        </member>
+        <member name="M:ExceptionHelpers.ErrorLineNumber(System.Exception)">
+            <summary>
+            Gibt die Fehler-Zeile zurück
+            </summary>
+            <param name="ex">Exception</param>
+            <returns></returns>
+        </member>
+        <member name="M:ExceptionHelpers.ErrorMethode(System.Exception)">
+            <summary>
+            Gibt die Fehler-Methode zurück
+            </summary>
+            <param name="ex">Exception</param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

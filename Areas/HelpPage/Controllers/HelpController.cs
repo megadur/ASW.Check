@@ -1,10 +1,9 @@
-using System;
 using System.Web.Http;
 using System.Web.Mvc;
-using webapitemplate.Areas.HelpPage.ModelDescriptions;
-using webapitemplate.Areas.HelpPage.Models;
+using WebApiFramework.Areas.HelpPage.ModelDescriptions;
+using WebApiFramework.Areas.HelpPage.Models;
 
-namespace webapitemplate.Areas.HelpPage.Controllers
+namespace WebApiFramework.Areas.HelpPage.Controllers
 {
     /// <summary>
     /// The controller that will handle requests for the help page.
@@ -33,7 +32,7 @@ namespace webapitemplate.Areas.HelpPage.Controllers
 
         public ActionResult Api(string apiId)
         {
-            if (!String.IsNullOrEmpty(apiId))
+            if (!string.IsNullOrEmpty(apiId))
             {
                 HelpPageApiModel apiModel = Configuration.GetHelpPageApiModel(apiId);
                 if (apiModel != null)
@@ -47,11 +46,10 @@ namespace webapitemplate.Areas.HelpPage.Controllers
 
         public ActionResult ResourceModel(string modelName)
         {
-            if (!String.IsNullOrEmpty(modelName))
+            if (!string.IsNullOrEmpty(modelName))
             {
                 ModelDescriptionGenerator modelDescriptionGenerator = Configuration.GetModelDescriptionGenerator();
-                ModelDescription modelDescription;
-                if (modelDescriptionGenerator.GeneratedModels.TryGetValue(modelName, out modelDescription))
+                if (modelDescriptionGenerator.GeneratedModels.TryGetValue(modelName, out ModelDescription modelDescription))
                 {
                     return View(modelDescription);
                 }
